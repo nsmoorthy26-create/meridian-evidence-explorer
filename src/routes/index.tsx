@@ -16,6 +16,12 @@ import {
 
 type Screen = "home" | "results" | "overview" | "graph";
 
+function getInitialResult(): MeridianResult {
+  const initialResult = meridianResults[0];
+  if (!initialResult) throw new Error("Meridian evidence results are unavailable.");
+  return initialResult;
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -35,7 +41,7 @@ function MeridianApp() {
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(INITIAL_RESULT_COUNT);
-  const [selected, setSelected] = useState<MeridianResult>(meridianResults[0]);
+  const [selected, setSelected] = useState<MeridianResult>(getInitialResult);
   const [searchNotice, setSearchNotice] = useState("");
 
   useEffect(() => {
@@ -56,7 +62,7 @@ function MeridianApp() {
     window.history.pushState({ screen: "results" }, "", "#search");
     setSubmittedQuery(query.trim());
     setVisibleCount(INITIAL_RESULT_COUNT);
-    setSelected(meridianResults[0]);
+    setSelected(getInitialResult());
     setSearchNotice("");
     setScreen("results");
   };
