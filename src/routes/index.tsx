@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Activity, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight,
   BookOpenText, Check, ChevronDown, ChevronRight, Command,
-  Database, FileCode2, Filter, GitBranch, Landmark, Layers3, LockKeyhole,
+  Database, FileCode2, Filter, GitBranch, Layers3, LockKeyhole,
   MoreHorizontal, Network, PanelRight, Search, ShieldCheck, Sparkles,
 } from "lucide-react";
 
