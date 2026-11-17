@@ -1,14 +1,16 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Activity, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, Banknote,
-  BookOpenText, Check, ChevronDown, ChevronRight, CircleHelp, Clock3, Command,
-  Database, FileCode2, Filter, GitBranch, Landmark, Layers3, LockKeyhole,
+  Activity, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight,
+  BookOpenText, Check, ChevronDown, ChevronRight, Command,
+  Database, FileCode2, Filter, GitBranch, Layers3, LockKeyhole,
   MoreHorizontal, Network, PanelRight, Search, ShieldCheck, Sparkles,
 } from "lucide-react";
 
+import meridianMark from "@/assets/meridian-mark.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   getSearchSummary, INITIAL_RESULT_COUNT, meridianResults, RESULTS_PER_PAGE,
   type MeridianResult,
@@ -43,6 +45,7 @@ function MeridianApp() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_RESULT_COUNT);
   const [selected, setSelected] = useState<MeridianResult>(getInitialResult);
   const [searchNotice, setSearchNotice] = useState("");
+  const [persona, setPersona] = useState("Business Analyst");
 
   useEffect(() => {
     const handleBack = () => {
@@ -87,8 +90,8 @@ function MeridianApp() {
     <div className="app-shell min-h-screen">
       <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md">
         <div className="mx-auto flex h-[72px] max-w-[1600px] items-center gap-6 px-5 lg:px-9">
-          <button aria-label="Meridian home" onClick={() => setScreen("home")} className="flex min-w-[230px] items-center gap-3 text-left">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground"><Landmark size={21} strokeWidth={1.8} /></span>
+          <button aria-label="Meridian home" onClick={() => setScreen("home")} className="flex min-w-[210px] items-center gap-3 text-left">
+            <img src={meridianMark} alt="" className="size-11 shrink-0 object-contain" />
             <span className="leading-tight"><span className="block text-[15px] font-bold tracking-[0.02em]">MERIDIAN</span><span className="block text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">CONNECTED INTELLIGENCE</span></span>
           </button>
           <form onSubmit={doSearch} className="mx-auto hidden w-full max-w-[620px] items-center gap-2 rounded-lg border border-border bg-card px-3 shadow-sm md:flex">
@@ -97,8 +100,17 @@ function MeridianApp() {
             <span className="flex shrink-0 items-center gap-1 rounded border border-border bg-muted px-1.5 py-1 text-[10px] font-medium text-muted-foreground"><Command size={11} /> K</span>
           </form>
           <div className="ml-auto flex items-center gap-3">
-            <span className="hidden items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium sm:flex"><span className="size-2 rounded-full bg-emerald-600" /> All systems operational</span>
-            <button className="flex size-9 items-center justify-center rounded-full border border-border bg-secondary text-xs font-bold text-secondary-foreground" aria-label="Account">AM</button>
+            <Select value={persona} onValueChange={setPersona}>
+              <SelectTrigger aria-label="Select persona" className="h-9 w-[170px] border-border bg-card text-xs font-medium sm:w-[190px]">
+                <SelectValue placeholder="Select persona" />
+              </SelectTrigger>
+              <SelectContent align="end">
+                <SelectItem value="Business Analyst">Business Analyst</SelectItem>
+                <SelectItem value="Application Owner">Application Owner</SelectItem>
+                <SelectItem value="Risk & Compliance">Risk &amp; Compliance</SelectItem>
+                <SelectItem value="Engineer">Engineer</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </header>
@@ -113,16 +125,6 @@ function MeridianApp() {
             <NavItem icon={<ShieldCheck size={17} />} label="Integrity" />
             <NavItem icon={<Layers3 size={17} />} label="Curation" />
           </nav>
-          <div className="mt-10 border-t border-border pt-6">
-            <div className="px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Knowledge base</div>
-            <div className="mt-4 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground"><Database size={16} /><span>Trade & settlement</span></div>
-            <div className="mt-4 rounded-lg border border-border bg-card p-3">
-              <div className="flex items-center justify-between text-xs font-semibold"><span>Source coverage</span><span className="text-primary">94%</span></div>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full w-[94%] rounded-full bg-primary" /></div>
-              <div className="mt-2 text-[10px] text-muted-foreground">142 programs indexed</div>
-            </div>
-          </div>
-          <div className="absolute bottom-7 flex items-center gap-2 px-3 text-xs text-muted-foreground"><CircleHelp size={15} /> Help & documentation</div>
         </aside>
 
         <main className="min-w-0 flex-1 px-5 py-7 lg:px-10 lg:py-9">
@@ -174,10 +176,6 @@ function HomeScreen({ query, setQuery, onSearch, notice }: { query: string; setQ
         <div className="absolute -right-2 top-[108px] h-10 w-1 rounded-full bg-primary" />
       </div></div>
     </div>
-    <div className="mt-12 border-t border-border pt-6">
-      <div className="mb-4 flex items-center justify-between"><div><h2 className="text-sm font-semibold">System pulse</h2><p className="mt-1 text-xs text-muted-foreground">Current estate signals</p></div><span className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><Clock3 size={13} /> Updated today, 06:10</span></div>
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><PulseItem icon={<Banknote size={17} />} label="Settlement flows" value="38 active" detail="Across 6 core programs" /><PulseItem icon={<ShieldCheck size={17} />} label="Controls verified" value="96.2%" detail="Evidence-backed rules" /><PulseItem icon={<Network size={17} />} label="Dependencies" value="214 links" detail="Program and data paths" /><PulseItem icon={<FileCode2 size={17} />} label="Legacy assets" value="142 programs" detail="COBOL source indexed" /></div>
-    </div>
     <div className="mt-9 grid gap-6 border-t border-border pt-7 md:grid-cols-[1fr_auto] md:items-center"><div><h2 className="text-sm font-semibold">Start with a question</h2><p className="mt-1 text-xs text-muted-foreground">Find programs, business rules, fields, and source evidence.</p></div><div className="flex flex-wrap gap-2">{suggestions.map((item) => <button key={item} onClick={() => setQuery(item)} className="rounded-full border border-border bg-card px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary">{item}<ArrowUpRight size={12} className="ml-2 inline" /></button>)}</div></div>
   </div>;
 }
@@ -191,10 +189,6 @@ function Metric({ label, value, trend }: { label: string; value: string; trend: 
   return <div className="rounded-lg border border-border bg-background p-3"><div className="text-[9px] text-muted-foreground">{label}</div><div className="mt-1 font-mono text-lg font-semibold">{value}</div><div className="mt-1 text-[9px] text-primary">{trend}</div></div>;
 }
 
-function PulseItem({ icon, label, value, detail }: { icon: React.ReactNode; label: string; value: string; detail: string }) {
-  return <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-4"><span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-secondary text-primary">{icon}</span><div><p className="text-xs text-muted-foreground">{label}</p><p className="mt-1 text-sm font-semibold">{value}</p><p className="mt-1 text-[10px] text-muted-foreground">{detail}</p></div></div>;
-}
-
 function ResultsScreen({ query, setQuery, onSearch, submittedQuery, visibleCount, setVisibleCount, selected, setSelected, onOverview, onGraph }: {
   query: string; setQuery: (value: string) => void; onSearch: (event?: FormEvent) => void; submittedQuery: string;
   visibleCount: number; setVisibleCount: (value: number) => void; selected: MeridianResult; setSelected: (value: MeridianResult) => void;
@@ -204,19 +198,16 @@ function ResultsScreen({ query, setQuery, onSearch, submittedQuery, visibleCount
   return <div className="mx-auto max-w-[1320px]">
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4"><div><div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-primary"><Sparkles size={14} /> Evidence-first results</div><h1 className="serif-display mt-2 text-3xl">Search the knowledge graph</h1></div><div className="text-xs text-muted-foreground">6 supporting sources <span className="mx-2">·</span> Updated 06:10</div></div>
     <form onSubmit={onSearch} className="mb-6 flex gap-2 rounded-lg border border-border bg-card p-2 shadow-sm"><div className="flex min-w-0 flex-1 items-center gap-2 px-2"><Search size={17} className="shrink-0 text-muted-foreground" /><Input aria-label="Search the knowledge graph" className="h-10 border-0 px-1 shadow-none focus-visible:ring-0" value={query || submittedQuery} onChange={(event) => setQuery(event.target.value)} /></div><Button type="submit" className="h-10 px-5"><Search size={15} /> Search</Button></form>
-    <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
       <div className="min-w-0">
         <div className="mb-4 rounded-lg border border-primary/35 bg-secondary/70 p-5"><div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-accent-foreground"><Sparkles size={12} /> AI synthesis · inferred</div><p className="text-[15px] leading-7">{getSearchSummary(submittedQuery)}</p><div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground"><span>Confidence <strong className="text-foreground">92%</strong></span><span>6 supporting sources</span><span>Generated from retrieved evidence only</span></div></div>
         <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground">Matching evidence <span className="ml-1 font-normal">({visibleResults.length} shown)</span></h2><button className="flex items-center gap-1 text-xs text-muted-foreground"><Filter size={13} /> Filters <ChevronDown size={12} /></button></div>
         <div className="space-y-3">{visibleResults.map((result) => <ResultCard key={result.id} result={result} selected={selected.id === result.id} onSelect={() => setSelected(result)} onOverview={() => onOverview(result)} />)}</div>
-        {visibleCount < meridianResults.length && <Button variant="outline" onClick={() => setVisibleCount(Math.min(visibleCount + RESULTS_PER_PAGE, meridianResults.length))} className="mt-4 h-10">Show More Results <ArrowRight size={14} /></Button>}
-        <EvidenceDrawer result={selected} onOverview={() => onOverview(selected)} onGraph={onGraph} />
+        {visibleCount < meridianResults.length && <Button variant="outline" onClick={() => setVisibleCount(Math.min(visibleCount + RESULTS_PER_PAGE, meridianResults.length))} className="mt-4 h-10">Show {Math.min(RESULTS_PER_PAGE, meridianResults.length - visibleCount)} more results <ArrowRight size={14} /></Button>}
       </div>
-      <aside className="hidden xl:block"><div className="sticky top-[96px] space-y-4">
-        <div className="rounded-lg border border-border bg-card p-4"><div className="flex items-center justify-between"><h2 className="text-xs font-bold uppercase tracking-[0.12em]">Portfolio signals</h2><button aria-label="More signals" className="text-muted-foreground"><MoreHorizontal size={17} /></button></div><div className="mt-5 flex items-center gap-4"><div className="risk-donut size-[74px]" /><div className="space-y-2 text-[10px] text-muted-foreground"><span className="flex items-center gap-2"><i className="size-2 rounded-full bg-primary" />Low risk <b className="text-foreground">62%</b></span><span className="flex items-center gap-2"><i className="size-2 rounded-full bg-chart-2" />Medium <b className="text-foreground">26%</b></span><span className="flex items-center gap-2"><i className="size-2 rounded-full bg-chart-3" />High <b className="text-foreground">12%</b></span></div></div><div className="mt-4 border-t border-border pt-3 text-[10px] text-muted-foreground">Risk distribution across indexed assets</div></div>
-        <div className="rounded-lg border border-border bg-card p-4"><div className="flex items-center justify-between"><h2 className="text-xs font-bold uppercase tracking-[0.12em]">Monthly activity</h2><span className="text-[10px] text-primary">+8.4%</span></div><div className="mt-4"><MiniBarChart /></div><div className="mt-2 flex justify-between text-[9px] text-muted-foreground"><span>01 Nov</span><span>08 Nov</span><span>15 Nov</span><span>Today</span></div></div>
-        <div className="rounded-lg border border-border bg-card p-4"><div className="flex items-center gap-2 text-xs font-semibold"><PanelRight size={15} className="text-primary" /> Evidence pipeline</div><div className="mt-3 flex items-center justify-between text-[11px]"><span className="text-muted-foreground">Run 142</span><span className="flex items-center gap-1.5 text-primary"><span className="size-1.5 rounded-full bg-primary" />Validated</span></div><div className="mt-1 text-[10px] text-muted-foreground">Last indexed today at 06:10</div></div>
-      </div></aside>
+      <aside className="min-w-0 xl:sticky xl:top-[96px]">
+        <EvidenceDrawer result={selected} onOverview={() => onOverview(selected)} onGraph={onGraph} />
+      </aside>
     </div>
   </div>;
 }
